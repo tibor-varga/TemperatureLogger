@@ -53,7 +53,7 @@ public class SensorManager implements HidServicesListener {
 		hidDevice = hidServices.getHidDevice(VENDOR_ID, PRODUCT_ID, SERIAL_NUMBER);
 	}
 
-	List<InfoRecord> readData() {
+	public List<InfoRecord> readData() {
 
 		List<InfoRecord> data = null;
 		if (hidDevice != null) {

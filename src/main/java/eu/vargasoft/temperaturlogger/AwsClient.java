@@ -6,7 +6,6 @@ package eu.vargasoft.temperaturlogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.amazonaws.services.iot.client.AWSIotConnectionStatus;
 import com.amazonaws.services.iot.client.AWSIotException;
 import com.amazonaws.services.iot.client.AWSIotMessage;
 import com.amazonaws.services.iot.client.AWSIotMqttClient;
@@ -14,7 +13,6 @@ import com.amazonaws.services.iot.client.AWSIotQos;
 import com.amazonaws.services.iot.client.sample.sampleUtil.SampleUtil;
 import com.amazonaws.services.iot.client.sample.sampleUtil.SampleUtil.KeyStorePasswordPair;
 
-import eu.vargasoft.temperaturlogger.awsiot.ConnectedWindow;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -23,9 +21,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
-public class AwsIotDevice {
+public class AwsClient {
 	@Autowired
 	private IotConfig config;
+
+	@Autowired
+	SensorManager sensorManager;
 
 	private AWSIotMqttClient awsIotClient = null;
 
@@ -60,29 +61,17 @@ public class AwsIotDevice {
 		}
 	}
 
-	public void sendData(InfoRecord infoRecord) throws AWSIotException, InterruptedException {
+	public TemperatureSensorShadow createDevice() throws AWSIotException, InterruptedException {
 		awsIotClient.setWillMessage(new AWSIotMessage("client/disconnect", AWSIotQos.QOS0, awsIotClient.getClientId()));
 
 		String thingName = config.getProperty("thingName");
-		ConnectedWindow connectedWindow = new ConnectedWindow(thingName);
+		TemperatureSensorShadow connectedWindow = new TemperatureSensorShadow(thingName, sensorManager);
 
 		awsIotClient.attach(connectedWindow);
 		awsIotClient.connect();
 
 		// Delete existing document if any
 		connectedWindow.delete();
-
-		AWSIotConnectionStatus status = AWSIotConnectionStatus.DISCONNECTED;
-		while (true) {
-			String jsonDocument = connectedWindow.get();
-			System.out.println("json from Device:" + jsonDocument);
-			AWSIotConnectionStatus newStatus = awsIotClient.getConnectionStatus();
-			if (!status.equals(newStatus)) {
-				System.out.println(System.currentTimeMillis() + " Connection status changed to " + newStatus);
-				status = newStatus;
-			}
-
-			Thread.sleep(1000);
-		}
+		return connectedWindow;
 	}
 }
