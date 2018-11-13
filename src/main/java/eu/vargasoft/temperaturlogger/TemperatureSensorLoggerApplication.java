@@ -23,7 +23,6 @@ public class TemperatureSensorLoggerApplication {
 		SpringApplication.run(TemperatureSensorLoggerApplication.class, args);
 		log.info(System.getenv().toString());
 		log.info(System.getProperties().toString());
-
 	}
 
 	@Bean
@@ -35,7 +34,8 @@ public class TemperatureSensorLoggerApplication {
 	@Bean
 	public Trigger sampleJobTrigger() {
 		SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(1)
-				.repeatForever();
+		// .repeatForever()
+		;
 
 		return TriggerBuilder.newTrigger().forJob(sampleJobDetail()).withIdentity("readSensorTrigger")
 				.withSchedule(scheduleBuilder).build();

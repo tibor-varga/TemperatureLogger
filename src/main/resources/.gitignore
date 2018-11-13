@@ -1,0 +1,5 @@
+/TemperatureSensor.cert.pem
+/TemperatureSensor.private.key
+/TemperatureSensor.public.key
+/root-CA.crt
+/aws-iot-sdk-samples.properties
