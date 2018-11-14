@@ -46,10 +46,10 @@ public class TemperatureSensorShadow extends AWSIotDevice {
 	@AWSIotDeviceProperty
 	private long timestamp;
 
-	public TemperatureSensorShadow(String thingName, SensorManager sensorManager) {
+	public TemperatureSensorShadow(String thingName, String sensorId, SensorManager sensorManager) {
 		super(thingName);
+		this.sensorId = sensorId;
 		this.sensorManager = sensorManager;
-
 	}
 
 	@PostConstruct
@@ -69,16 +69,22 @@ public class TemperatureSensorShadow extends AWSIotDevice {
 		List<InfoRecord> datas = sensorManager.readData();
 		if (datas != null) {
 			for (InfoRecord data : datas) {
-				log.info(data.toString());
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+
+				if (data.sensorId.equals(this.sensorId)) {
+					log.info(data.toString());
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					this.temperature = data.getValue();
+					// this.sensorId = data.getSensorId();
+					this.timestamp = data.getTimestamp();
+				} else {
+					log.warn("dropping record:" + data.toString());
 				}
-				this.temperature = data.getValue();
-				this.sensorId = data.getSensorId();
-				this.timestamp = data.getTimestamp();
 			}
 		}
 
