@@ -65,13 +65,13 @@ public class AwsClient {
 		awsIotClient.setWillMessage(new AWSIotMessage("client/disconnect", AWSIotQos.QOS0, awsIotClient.getClientId()));
 
 		String thingName = config.getProperty("thingName");
-		TemperatureSensorShadow connectedWindow = new TemperatureSensorShadow(thingName, sensorManager);
+		TemperatureSensorShadow sensor = new TemperatureSensorShadow(thingName, sensorManager);
 
-		awsIotClient.attach(connectedWindow);
+		awsIotClient.attach(sensor);
 		awsIotClient.connect();
 
 		// Delete existing document if any
-		connectedWindow.delete();
-		return connectedWindow;
+		sensor.delete();
+		return sensor;
 	}
 }

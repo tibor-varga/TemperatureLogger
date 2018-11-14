@@ -7,9 +7,6 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import com.amazonaws.services.iot.client.AWSIotException;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class ReadSensorQuartzJob extends QuartzJobBean {
 	@Autowired
 	AwsClient iotClient;
@@ -27,10 +24,6 @@ public class ReadSensorQuartzJob extends QuartzJobBean {
 		TemperatureSensorShadow device;
 		try {
 			device = iotClient.createDevice();
-			while (true) {
-				String jsonDocument = device.get();
-				log.debug("json from Device:" + jsonDocument);
-			}
 		} catch (AWSIotException | InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

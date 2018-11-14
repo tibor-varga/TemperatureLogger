@@ -10,10 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import lombok.extern.slf4j.Slf4j;
-
 @SpringBootApplication
-@Slf4j
 public class TemperatureSensorLoggerApplication {
 
 	@Autowired
@@ -21,8 +18,6 @@ public class TemperatureSensorLoggerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TemperatureSensorLoggerApplication.class, args);
-		log.info(System.getenv().toString());
-		log.info(System.getProperties().toString());
 	}
 
 	@Bean
