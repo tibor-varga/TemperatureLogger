@@ -16,7 +16,7 @@ import org.springframework.core.env.Environment;
 @PropertySource("classpath:aws-iot-sdk-samples.properties")
 public class IotConfig {
 	@Autowired
-	private Environment env;
+	Environment env;
 
 	public String getProperty(String name) {
 		return env.getProperty(name);

@@ -3,7 +3,10 @@
  */
 package eu.vargasoft.temperaturlogger;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.iot.client.AWSIotException;
@@ -26,10 +29,11 @@ public class AwsClient {
 	private IotConfig config;
 
 	@Autowired
-	SensorManager sensorManager;
+	private SensorManager sensorManager;
 
 	private AWSIotMqttClient awsIotClient = null;
 
+	@PostConstruct
 	void init() {
 		String clientEndpoint = config.getProperty("clientEndpoint");
 		String clientId = config.getProperty("clientId");
@@ -61,6 +65,7 @@ public class AwsClient {
 		}
 	}
 
+	@Bean
 	public TemperatureSensorShadow createDevice() throws AWSIotException, InterruptedException {
 		awsIotClient.setWillMessage(new AWSIotMessage("client/disconnect", AWSIotQos.QOS0, awsIotClient.getClientId()));
 

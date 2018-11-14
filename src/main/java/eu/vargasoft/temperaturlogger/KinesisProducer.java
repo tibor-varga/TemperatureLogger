@@ -46,7 +46,5 @@ public class KinesisProducer {
 		putRecordsRequest.setRecords(putRecordsRequestEntryList);
 		PutRecordsResult putRecordsResult = kinesisClient.putRecords(putRecordsRequest);
 		System.out.println("Put Result" + putRecordsResult);
-
 	}
-
 }
