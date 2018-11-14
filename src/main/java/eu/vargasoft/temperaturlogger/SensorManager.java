@@ -66,7 +66,7 @@ public class SensorManager implements HidServicesListener {
 		}
 
 		// Stop the main thread to demonstrate attach and detach events
-		sleepUninterruptibly(5, TimeUnit.SECONDS);
+		sleepUninterruptibly(1, TimeUnit.SECONDS);
 		return data;
 	}
 
@@ -148,7 +148,7 @@ public class SensorManager implements HidServicesListener {
 	 * Invokes {@code unit.}{@link java.util.concurrent.TimeUnit#sleep(long)
 	 * sleep(sleepFor)} uninterruptibly.
 	 */
-	public static void sleepUninterruptibly(long sleepFor, TimeUnit unit) {
+	public void sleepUninterruptibly(long sleepFor, TimeUnit unit) {
 		boolean interrupted = false;
 		try {
 			long remainingNanos = unit.toNanos(sleepFor);

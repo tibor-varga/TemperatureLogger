@@ -17,6 +17,10 @@ package eu.vargasoft.temperaturlogger;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.amazonaws.services.iot.client.AWSIotDevice;
 import com.amazonaws.services.iot.client.AWSIotDeviceProperty;
 
@@ -30,6 +34,9 @@ import lombok.extern.slf4j.Slf4j;
 public class TemperatureSensorShadow extends AWSIotDevice {
 	SensorManager sensorManager;
 
+	@Autowired
+	private IotConfig config;
+
 	@AWSIotDeviceProperty
 	private float temperature;
 
@@ -42,13 +49,33 @@ public class TemperatureSensorShadow extends AWSIotDevice {
 	public TemperatureSensorShadow(String thingName, SensorManager sensorManager) {
 		super(thingName);
 		this.sensorManager = sensorManager;
+
+	}
+
+	@PostConstruct
+	private void init() {
+		long sampleRate = Long.parseLong(config.getProperty("sampleRate"));
+		log.info("Setting sampleRate to:" + sampleRate);
+		this.setReportInterval(sampleRate);
 	}
 
 	public float getTemperature() {
+		try {
+			Thread.sleep(this.getReportInterval());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		List<InfoRecord> datas = sensorManager.readData();
 		if (datas != null) {
 			for (InfoRecord data : datas) {
 				log.info(data.toString());
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				this.temperature = data.getValue();
 				this.sensorId = data.getSensorId();
 				this.timestamp = data.getTimestamp();
