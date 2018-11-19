@@ -8,7 +8,7 @@ Main components:
   - Elasticsearch 
   - Kibana
 
-##Sample aws-iot-sdk-samples.properties
+## Sample aws-iot-sdk-samples.properties
 ``` 
 # Client endpoint, e.g. <prefix>.iot.us-east-1.amazonaws.com
 clientEndpoint=
@@ -55,10 +55,10 @@ sampleRate=1000
 }
 ' 'https://elastisearch.endpoint/temperature'
 ```
-##delete index if it is necessary
+## delete index if it is necessary
 ```
 curl -i -H'Content-Type: application/json' -X DELETE 'https://elastisearch.endpoint/temperature'
 ```
 
-##Known problems
+## Known problems
 After many hours work, breaks the MQTT connection, see https://github.com/eclipse/paho.mqtt.java/issues/358 
